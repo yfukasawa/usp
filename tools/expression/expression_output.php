@@ -92,7 +92,6 @@ if ( file_exists("$expr_file") && isset($gids) ) {
     $col_count = 0;
     $gene_name = $columns[0];
     
-    
     // gene found in input list
     if ( in_array(strtolower($gene_name), array_map("strtolower", $gids)) ) {
       if (!in_array($gene_name,$found_genes)) {
@@ -119,7 +118,6 @@ if ( file_exists("$expr_file") && isset($gids) ) {
         $gene_name_found = 1;
       }
     }
-    
     // if the gene was found
     if ($gene_name_found) {
       foreach ($columns as $col) {
@@ -402,9 +400,15 @@ if(count($found_genes)!= 0)
     {
       switch($key){
         case 'cards':
+          ob_start();
           include realpath('03_expr_load_cards_html.php');
+          $cards_content = ob_get_clean();
           $frame="cards_frame"; 
           break;
+	  /*
+          include realpath('03_expr_load_cards_html.php');
+          $frame="cards_frame"; 
+	  break;*/
 
         case 'table' :
           include realpath('03_expr_load_avg_table_html.php');
@@ -416,11 +420,19 @@ if(count($found_genes)!= 0)
           $frame="replicates_graph";
           break;
 
-        case 'cartoons':
+	case 'cartoons':
+	  ob_start();
+	  include realpath('03_expr_load_cartoons_html.php');
+	  $cartoons_content = ob_get_clean();
+	  if($cartoons_files_found){
+		  $frame="cartoons_frame";
+	  }
+	  break;
+	  /*
           include realpath('03_expr_load_cartoons_html.php');
           if($cartoons_files_found) // This variable is located in 03_expr_load_cartoons_html
           {$frame="cartoons_frame";} 
-          break;
+	  break;*/
 
         case 'heatmap':
           include realpath('03_expr_load_heatmap_html.php');
